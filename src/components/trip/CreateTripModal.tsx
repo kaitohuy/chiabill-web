@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Plane, Tent, Utensils, Users, Folder, Calendar, DollarSign, FileText } from 'lucide-react';
 import api from '../../services/api';
-import ImageUpload from '../common/ImageUpload';
 
 interface TripData {
   id: number;
@@ -37,7 +36,6 @@ const CreateTripModal: React.FC<CreateTripModalProps> = ({ isOpen, onClose, onSu
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
-  const [coverUrl, setCoverUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -49,7 +47,6 @@ const CreateTripModal: React.FC<CreateTripModalProps> = ({ isOpen, onClose, onSu
         setTotalBudget(tripToEdit.totalBudget ? String(tripToEdit.totalBudget) : '');
         setStartDate(tripToEdit.startDate ? tripToEdit.startDate.split('T')[0] : '');
         setEndDate(tripToEdit.endDate ? tripToEdit.endDate.split('T')[0] : '');
-        setCoverUrl(tripToEdit.coverUrl || '');
         const cat = CATEGORIES.find(c => c.name === tripToEdit.categoryName) || CATEGORIES[0];
         setSelectedCategory(cat);
       } else {
@@ -58,7 +55,6 @@ const CreateTripModal: React.FC<CreateTripModalProps> = ({ isOpen, onClose, onSu
         setTotalBudget('');
         setStartDate('');
         setEndDate('');
-        setCoverUrl('');
         setSelectedCategory(CATEGORIES[0]);
       }
       setError('');

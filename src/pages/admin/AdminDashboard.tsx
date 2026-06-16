@@ -108,7 +108,6 @@ const AdminDashboard: React.FC = () => {
   // Announcements state
   const [announcements, setAnnouncements] = useState<AppAnnouncement[]>([]);
   const [annPage, setAnnPage] = useState(0);
-  const [annTotalPages, setAnnTotalPages] = useState(1);
 
   // Announcements Filters
   const [annSearch, setAnnSearch] = useState('');
@@ -248,7 +247,6 @@ const AdminDashboard: React.FC = () => {
       const res = await api.get(`/api/announcements?page=0&size=100`);
       if (res.data?.success) {
         setAnnouncements(res.data.data?.content || []);
-        setAnnTotalPages(res.data.data?.totalPages || 1);
       }
     } catch {
       setError('Lỗi khi tải danh sách thông báo');
