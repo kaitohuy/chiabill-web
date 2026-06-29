@@ -16,6 +16,7 @@ interface AppAnnouncement {
   actionType: 'NONE' | 'OPEN_URL' | 'OPEN_STORE' | 'OPEN_SCREEN' | 'DISMISS';
   actionUrl?: string;
   actionLabel?: string;
+  actionLabelEn?: string;
   minVersion?: number;
   latestVersion?: number;
   isForceUpdate?: boolean;
@@ -56,13 +57,18 @@ interface PlaceReport {
 interface Place {
   id: number;
   name: string;
+  nameEn?: string;
   category: string;
   latitude: number;
   longitude: number;
   city: string;
+  cityEn?: string;
   summary?: string;
+  summaryEn?: string;
   ticketPrices?: string;
+  ticketPricesEn?: string;
   openingHours?: string;
+  openingHoursEn?: string;
   imageUrls: string[];
 }
 
@@ -128,6 +134,7 @@ const AdminDashboard: React.FC = () => {
     actionType: 'NONE' as AppAnnouncement['actionType'],
     actionUrl: '',
     actionLabel: '',
+    actionLabelEn: '',
     minVersion: '' as string | number,
     latestVersion: '' as string | number,
     isForceUpdate: false,
@@ -150,13 +157,18 @@ const AdminDashboard: React.FC = () => {
   const [editingPlace, setEditingPlace] = useState<Place | null>(null);
   const [placeForm, setPlaceForm] = useState({
     name: '',
+    nameEn: '',
     category: 'Địa danh',
     latitude: 16.047,
     longitude: 108.206,
     city: 'Đà Nẵng',
+    cityEn: '',
     summary: '',
+    summaryEn: '',
     ticketPrices: 'Miễn phí',
+    ticketPricesEn: '',
     openingHours: 'Mở cửa cả ngày',
+    openingHoursEn: '',
     imageUrls: ['']
   });
 
@@ -293,6 +305,7 @@ const AdminDashboard: React.FC = () => {
       actionType: 'NONE',
       actionUrl: '',
       actionLabel: '',
+      actionLabelEn: '',
       minVersion: '',
       latestVersion: '',
       isForceUpdate: false,
@@ -330,6 +343,7 @@ const AdminDashboard: React.FC = () => {
       actionType: ann.actionType || 'NONE',
       actionUrl: ann.actionUrl || '',
       actionLabel: ann.actionLabel || '',
+      actionLabelEn: ann.actionLabelEn || '',
       minVersion: ann.minVersion ?? '',
       latestVersion: ann.latestVersion ?? '',
       isForceUpdate: !!ann.isForceUpdate,
@@ -367,6 +381,7 @@ const AdminDashboard: React.FC = () => {
       actionType: ann.actionType || 'NONE',
       actionUrl: ann.actionUrl || '',
       actionLabel: ann.actionLabel || '',
+      actionLabelEn: ann.actionLabelEn || '',
       minVersion: ann.minVersion ?? '',
       latestVersion: ann.latestVersion ?? '',
       isForceUpdate: !!ann.isForceUpdate,
@@ -412,6 +427,7 @@ const AdminDashboard: React.FC = () => {
         actionType: annForm.actionType,
         actionUrl: annForm.actionType !== 'NONE' && annForm.actionType !== 'DISMISS' ? annForm.actionUrl : null,
         actionLabel: annForm.actionType !== 'NONE' ? annForm.actionLabel : null,
+        actionLabelEn: annForm.actionType !== 'NONE' ? annForm.actionLabelEn : null,
         minVersion: annForm.type === 'UPDATE' && annForm.minVersion !== '' ? Number(annForm.minVersion) : null,
         latestVersion: annForm.type === 'UPDATE' && annForm.latestVersion !== '' ? Number(annForm.latestVersion) : null,
         isForceUpdate: annForm.type === 'UPDATE' ? annForm.isForceUpdate : null,
@@ -533,13 +549,18 @@ const AdminDashboard: React.FC = () => {
     setEditingPlace(null);
     setPlaceForm({
       name: '',
+      nameEn: '',
       category: 'Địa danh',
       latitude: 16.047,
       longitude: 108.206,
       city: 'Đà Nẵng',
+      cityEn: '',
       summary: '',
+      summaryEn: '',
       ticketPrices: 'Miễn phí',
+      ticketPricesEn: '',
       openingHours: 'Mở cửa cả ngày',
+      openingHoursEn: '',
       imageUrls: ['']
     });
     setIsPlaceModalOpen(true);
@@ -549,13 +570,18 @@ const AdminDashboard: React.FC = () => {
     setEditingPlace(place);
     setPlaceForm({
       name: place.name,
+      nameEn: place.nameEn || '',
       category: place.category,
       latitude: place.latitude,
       longitude: place.longitude,
       city: place.city,
+      cityEn: place.cityEn || '',
       summary: place.summary || '',
+      summaryEn: place.summaryEn || '',
       ticketPrices: place.ticketPrices || 'Miễn phí',
+      ticketPricesEn: place.ticketPricesEn || '',
       openingHours: place.openingHours || 'Mở cửa cả ngày',
+      openingHoursEn: place.openingHoursEn || '',
       imageUrls: place.imageUrls && place.imageUrls.length > 0 ? [...place.imageUrls] : ['']
     });
     setIsPlaceModalOpen(true);
@@ -1333,13 +1359,22 @@ const AdminDashboard: React.FC = () => {
 
             <form onSubmit={handlePlaceFormSubmit} className="space-y-3.5 text-xs">
               <div className="grid grid-cols-2 gap-3">
-                <div className="col-span-2">
-                  <label className="block text-slate-400 font-bold mb-1">Tên địa điểm *</label>
+                <div className="col-span-1">
+                  <label className="block text-slate-400 font-bold mb-1">Tên địa điểm (VI) *</label>
                   <input
                     type="text"
                     required
                     value={placeForm.name}
                     onChange={e => setPlaceForm(prev => ({ ...prev, name: e.target.value }))}
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white"
+                  />
+                </div>
+                <div className="col-span-1">
+                  <label className="block text-slate-400 font-bold mb-1">Tên địa điểm (EN)</label>
+                  <input
+                    type="text"
+                    value={placeForm.nameEn}
+                    onChange={e => setPlaceForm(prev => ({ ...prev, nameEn: e.target.value }))}
                     className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white"
                   />
                 </div>
@@ -1360,12 +1395,21 @@ const AdminDashboard: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-400 font-bold mb-1">Thành phố/Tỉnh *</label>
+                  <label className="block text-slate-400 font-bold mb-1">Thành phố/Tỉnh (VI) *</label>
                   <input
                     type="text"
                     required
                     value={placeForm.city}
                     onChange={e => setPlaceForm(prev => ({ ...prev, city: e.target.value }))}
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-400 font-bold mb-1">Thành phố/Tỉnh (EN)</label>
+                  <input
+                    type="text"
+                    value={placeForm.cityEn}
+                    onChange={e => setPlaceForm(prev => ({ ...prev, cityEn: e.target.value }))}
                     className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white"
                   />
                 </div>
@@ -1395,7 +1439,7 @@ const AdminDashboard: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-400 font-bold mb-1">Giá vé</label>
+                  <label className="block text-slate-400 font-bold mb-1">Giá vé (VI)</label>
                   <input
                     type="text"
                     value={placeForm.ticketPrices}
@@ -1404,9 +1448,19 @@ const AdminDashboard: React.FC = () => {
                     className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white"
                   />
                 </div>
+                <div>
+                  <label className="block text-slate-400 font-bold mb-1">Giá vé (EN)</label>
+                  <input
+                    type="text"
+                    value={placeForm.ticketPricesEn}
+                    onChange={e => setPlaceForm(prev => ({ ...prev, ticketPricesEn: e.target.value }))}
+                    placeholder="Free or 50,000 VND..."
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white"
+                  />
+                </div>
 
                 <div>
-                  <label className="block text-slate-400 font-bold mb-1">Giờ mở cửa</label>
+                  <label className="block text-slate-400 font-bold mb-1">Giờ mở cửa (VI)</label>
                   <input
                     type="text"
                     value={placeForm.openingHours}
@@ -1415,16 +1469,37 @@ const AdminDashboard: React.FC = () => {
                     className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white"
                   />
                 </div>
+                <div>
+                  <label className="block text-slate-400 font-bold mb-1">Giờ mở cửa (EN)</label>
+                  <input
+                    type="text"
+                    value={placeForm.openingHoursEn}
+                    onChange={e => setPlaceForm(prev => ({ ...prev, openingHoursEn: e.target.value }))}
+                    placeholder="08:00 - 18:00..."
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white"
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-slate-400 font-bold mb-1">Tóm tắt mô tả</label>
-                <textarea
-                  value={placeForm.summary}
-                  onChange={e => setPlaceForm(prev => ({ ...prev, summary: e.target.value }))}
-                  rows={3}
-                  className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white resize-none"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-400 font-bold mb-1">Tóm tắt mô tả (VI)</label>
+                  <textarea
+                    value={placeForm.summary}
+                    onChange={e => setPlaceForm(prev => ({ ...prev, summary: e.target.value }))}
+                    rows={3}
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white resize-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-400 font-bold mb-1">Tóm tắt mô tả (EN)</label>
+                  <textarea
+                    value={placeForm.summaryEn}
+                    onChange={e => setPlaceForm(prev => ({ ...prev, summaryEn: e.target.value }))}
+                    rows={3}
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white resize-none"
+                  />
+                </div>
               </div>
 
               {/* Image Urls Section */}
@@ -1669,7 +1744,7 @@ const AdminDashboard: React.FC = () => {
               <div className="p-4 bg-slate-55/5 dark:bg-slate-950/20 border border-slate-100 dark:border-slate-800/60 rounded-xl space-y-3">
                 <h4 className="font-bold text-slate-700 dark:text-slate-300 text-xs">3. Nút hành động tương tác (Call to Action)</h4>
                 
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-slate-400 font-bold mb-1">Loại hành động</label>
                     <select
@@ -1686,18 +1761,6 @@ const AdminDashboard: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-slate-400 font-bold mb-1">Nhãn nút hành động</label>
-                    <input
-                      type="text"
-                      disabled={annForm.actionType === 'NONE'}
-                      value={annForm.actionLabel}
-                      onChange={e => setAnnForm(prev => ({ ...prev, actionLabel: e.target.value }))}
-                      placeholder={annForm.actionType === 'NONE' ? 'Không có nút' : 'Ví dụ: Xem ngay, Cập nhật...'}
-                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white disabled:opacity-40"
-                    />
-                  </div>
-
-                  <div>
                     <label className="block text-slate-400 font-bold mb-1">URL / Tên màn hình đích</label>
                     <input
                       type="text"
@@ -1711,6 +1774,31 @@ const AdminDashboard: React.FC = () => {
                             ? 'screen_trip_details' 
                             : 'Không khả dụng'
                       }
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white disabled:opacity-40"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 mt-3">
+                  <div>
+                    <label className="block text-slate-400 font-bold mb-1">Nhãn nút hành động (VI)</label>
+                    <input
+                      type="text"
+                      disabled={annForm.actionType === 'NONE'}
+                      value={annForm.actionLabel}
+                      onChange={e => setAnnForm(prev => ({ ...prev, actionLabel: e.target.value }))}
+                      placeholder={annForm.actionType === 'NONE' ? 'Không có nút' : 'Ví dụ: Xem ngay, Cập nhật...'}
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white disabled:opacity-40"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-400 font-bold mb-1">Nhãn nút hành động (EN)</label>
+                    <input
+                      type="text"
+                      disabled={annForm.actionType === 'NONE'}
+                      value={annForm.actionLabelEn}
+                      onChange={e => setAnnForm(prev => ({ ...prev, actionLabelEn: e.target.value }))}
+                      placeholder={annForm.actionType === 'NONE' ? 'Không có nút' : 'Ví dụ: View details, Update...'}
                       className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white disabled:opacity-40"
                     />
                   </div>
