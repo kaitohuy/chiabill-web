@@ -11,7 +11,9 @@ interface AppAnnouncement {
   id: number;
   type: 'UPDATE' | 'ANNOUNCEMENT' | 'PAYMENT' | 'DONATE' | 'PROMOTION' | 'MAINTENANCE';
   title: string;
+  titleEn?: string;
   content?: string;
+  contentEn?: string;
   imageUrl?: string;
   actionType: 'NONE' | 'OPEN_URL' | 'OPEN_STORE' | 'OPEN_SCREEN' | 'DISMISS';
   actionUrl?: string;
@@ -129,7 +131,9 @@ const AdminDashboard: React.FC = () => {
   const [annForm, setAnnForm] = useState({
     type: 'ANNOUNCEMENT' as AppAnnouncement['type'],
     title: '',
+    titleEn: '',
     content: '',
+    contentEn: '',
     imageUrl: '',
     actionType: 'NONE' as AppAnnouncement['actionType'],
     actionUrl: '',
@@ -300,7 +304,9 @@ const AdminDashboard: React.FC = () => {
     setAnnForm({
       type: 'ANNOUNCEMENT',
       title: '',
+      titleEn: '',
       content: '',
+      contentEn: '',
       imageUrl: '',
       actionType: 'NONE',
       actionUrl: '',
@@ -338,7 +344,9 @@ const AdminDashboard: React.FC = () => {
     setAnnForm({
       type: ann.type,
       title: ann.title,
+      titleEn: ann.titleEn || '',
       content: ann.content || '',
+      contentEn: ann.contentEn || '',
       imageUrl: ann.imageUrl || '',
       actionType: ann.actionType || 'NONE',
       actionUrl: ann.actionUrl || '',
@@ -376,7 +384,9 @@ const AdminDashboard: React.FC = () => {
     setAnnForm({
       type: ann.type,
       title: `${ann.title} (Bản sao)`,
+      titleEn: ann.titleEn ? `${ann.titleEn} (Copy)` : '',
       content: ann.content || '',
+      contentEn: ann.contentEn || '',
       imageUrl: ann.imageUrl || '',
       actionType: ann.actionType || 'NONE',
       actionUrl: ann.actionUrl || '',
@@ -422,7 +432,9 @@ const AdminDashboard: React.FC = () => {
       const payload = {
         type: annForm.type,
         title: annForm.title,
+        titleEn: annForm.titleEn || null,
         content: annForm.content || null,
+        contentEn: annForm.contentEn || null,
         imageUrl: annForm.imageUrl || null,
         actionType: annForm.actionType,
         actionUrl: annForm.actionType !== 'NONE' && annForm.actionType !== 'DISMISS' ? annForm.actionUrl : null,
@@ -1596,7 +1608,20 @@ const AdminDashboard: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-slate-400 font-bold mb-1">Tiêu đề thông báo *</label>
+                    <label className="block text-slate-400 font-bold mb-1">Hình ảnh mô tả (URL)</label>
+                    <input
+                      type="url"
+                      value={annForm.imageUrl}
+                      onChange={e => setAnnForm(prev => ({ ...prev, imageUrl: e.target.value }))}
+                      placeholder="https://example.com/banner.png"
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-400 font-bold mb-1">Tiêu đề thông báo (VI) *</label>
                     <input
                       type="text"
                       required
@@ -1606,28 +1631,39 @@ const AdminDashboard: React.FC = () => {
                       className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white"
                     />
                   </div>
+                  <div>
+                    <label className="block text-slate-400 font-bold mb-1">Tiêu đề thông báo (EN)</label>
+                    <input
+                      type="text"
+                      value={annForm.titleEn}
+                      onChange={e => setAnnForm(prev => ({ ...prev, titleEn: e.target.value }))}
+                      placeholder="Enter announcement title..."
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white"
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-slate-400 font-bold mb-1">Nội dung chi tiết</label>
-                  <textarea
-                    value={annForm.content}
-                    onChange={e => setAnnForm(prev => ({ ...prev, content: e.target.value }))}
-                    placeholder="Mô tả chi tiết nội dung thông báo..."
-                    rows={3}
-                    className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white resize-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 font-bold mb-1">Hình ảnh mô tả (URL)</label>
-                  <input
-                    type="url"
-                    value={annForm.imageUrl}
-                    onChange={e => setAnnForm(prev => ({ ...prev, imageUrl: e.target.value }))}
-                    placeholder="https://example.com/banner.png"
-                    className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white"
-                  />
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-400 font-bold mb-1">Nội dung chi tiết (VI)</label>
+                    <textarea
+                      value={annForm.content}
+                      onChange={e => setAnnForm(prev => ({ ...prev, content: e.target.value }))}
+                      placeholder="Mô tả chi tiết nội dung thông báo..."
+                      rows={3}
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white resize-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-400 font-bold mb-1">Nội dung chi tiết (EN)</label>
+                    <textarea
+                      value={annForm.contentEn}
+                      onChange={e => setAnnForm(prev => ({ ...prev, contentEn: e.target.value }))}
+                      placeholder="Detailed announcement content..."
+                      rows={3}
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary text-slate-800 dark:text-white resize-none"
+                    />
+                  </div>
                 </div>
               </div>
 
